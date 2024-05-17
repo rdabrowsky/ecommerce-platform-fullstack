@@ -20,8 +20,6 @@ const ProductScreen = () => {
     fetchProduct().catch((error) => console.error('Error in fetchProducts:', error));
   }, [productId]);
 
-  console.log(product);
-
   return (
     <>
       <BackButton title={'Go Back'} />
