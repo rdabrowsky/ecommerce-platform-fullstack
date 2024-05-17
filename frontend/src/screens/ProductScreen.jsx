@@ -1,14 +1,12 @@
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { products } from '../products';
-import { useEffect } from 'react';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from '../components/Rating';
 import BackButton from '../components/BackButton';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
-  const location = useLocation();
   const product = products.find((p) => p._id === productId);
 
   return (
