@@ -1,8 +1,10 @@
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
+import Loader from '../components/Loader';
 import Rating from '../components/Rating';
 import BackButton from '../components/BackButton';
 import { useGetSingleProductQuery } from '../slices/productSlice';
 import { useParams } from 'react-router-dom';
+import Message from '../components/Message';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -11,9 +13,9 @@ const ProductScreen = () => {
     <>
       <BackButton title={'Go Back'} />
       {isLoading ? (
-        <h1>Loading...</h1>
+        <Loader />
       ) : error ? (
-        <div>{error?.data?.message || error.error}</div>
+        <Message variant={'danger'}>{error?.data?.message || error.error}</Message>
       ) : (
         <Row>
           <Col md={5}>
