@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { add } from 'nodemon/lib/rules';
 
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
