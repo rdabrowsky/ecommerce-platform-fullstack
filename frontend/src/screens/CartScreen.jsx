@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrashAlt } from 'react-icons/fa';
-import Message from '../components/Message';
+import { Message } from '../components';
 import { addToCart, removeFromCart } from '../slices/cartSlice';
 
 const CartScreen = () => {

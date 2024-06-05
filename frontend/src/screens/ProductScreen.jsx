@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import Loader from '../components/Loader';
-import Rating from '../components/Rating';
-import BackButton from '../components/BackButton';
+import { Loader, Rating, BackButton, Message } from '../components';
 import { useGetSingleProductQuery } from '../slices/productSlice';
 import { useParams, useNavigate } from 'react-router-dom';
-import Message from '../components/Message';
 import { addToCart } from '../slices/cartSlice';
 import { useDispatch } from 'react-redux';
 
@@ -17,9 +14,9 @@ const ProductScreen = () => {
   const navigate = useNavigate();
 
   const addToCartHandler = () => {
-    dispatch(addToCart({...product, qty: itemQuantity}));
+    dispatch(addToCart({ ...product, qty: itemQuantity }));
     navigate('/cart');
-  }
+  };
 
   return (
     <>
@@ -81,7 +78,11 @@ const ProductScreen = () => {
                           value={itemQuantity}
                           onChange={({ target }) => setItemQuantity(+target.value)}
                         >
-                          {[...Array(product.countInStock).keys()].map(key => (<option key={key + 1} value={key + 1}>{key + 1}</option>))}
+                          {[...Array(product.countInStock).keys()].map((key) => (
+                            <option key={key + 1} value={key + 1}>
+                              {key + 1}
+                            </option>
+                          ))}
                         </Form.Control>
                       </Col>
                     </Row>

@@ -11,11 +11,8 @@ import {
 } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import HomeScreen from './screens/HomeScreen';
-import ProductScreen from './screens/ProductScreen';
 import store from './store';
-import CartScreen from './screens/CartScreen';
-import LoginScreen from './screens/LoginScreen';
+import { HomeScreen, ProductScreen, CartScreen, LoginScreen, RegisterScreen } from './screens';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +21,7 @@ const router = createBrowserRouter(
       <Route path={'/product/:id'} element={<ProductScreen />} />
       <Route path={'/cart/'} element={<CartScreen />} />
       <Route path={'/login'} element={<LoginScreen />} />
+      <Route path={'/register'} element={<RegisterScreen />} />
     </Route>,
   ),
 );
