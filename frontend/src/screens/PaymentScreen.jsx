@@ -10,12 +10,12 @@ const PaymentScreen = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
-  const { paymentMethod: payment, shippingAddress } = cart;
-  const [paymentMethod, setPaymentMethod] = useState(payment || 'PayPal');
+  const { shippingAddress } = cart;
+  const [paymentMethod, setPaymentMethod] = useState('PayPal');
   const submitHandler = (e) => {
     e.preventDefault();
 
-    dispatch(savePaymentMethod({ paymentMethod }));
+    dispatch(savePaymentMethod(paymentMethod));
     navigate('/placeorder');
   };
 
