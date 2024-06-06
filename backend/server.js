@@ -5,6 +5,7 @@ import connectDB from './config/database.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 dotenv.config();
 
@@ -29,6 +30,9 @@ app.use('/api/products/', productRoutes);
 
 // User Routes
 app.use('/api/users/', userRoutes);
+
+// Order routes
+app.use('/api/orders/', orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
