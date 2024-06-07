@@ -1,5 +1,5 @@
 export const addDecimals = (num) => {
-  return (Math.round(num * 100) / 100).toFixed();
+  return (Math.round(num * 100) / 100).toFixed(2);
 };
 
 export const updateCart = (state) => {
@@ -10,7 +10,7 @@ export const updateCart = (state) => {
   // Calculate shipping price (if order is over $100 then free  else $10)
   state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
   // Calculate tax price (15%)
-  state.taxPrice = addDecimals(Number((state.shippingPrice * 0.15).toFixed(2)));
+  state.taxPrice = addDecimals(Number(state.itemsPrice * 0.15));
   // Calculate total price
   state.totalPrice = (
     Number(state.itemsPrice) +

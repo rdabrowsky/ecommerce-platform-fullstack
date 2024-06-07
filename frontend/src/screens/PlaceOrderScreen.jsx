@@ -6,12 +6,13 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { CheckoutsSteps, Message, Loader } from '../components';
 import { useCreateOrderMutation } from '../slices/orderApiSlice';
 import { clearCartItems } from '../slices/cartSlice';
-
 const PlaceOrderScreen = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
   const { address, city, postalCode, country } = cart.shippingAddress;
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
@@ -20,6 +21,25 @@ const PlaceOrderScreen = () => {
       navigate('/payment');
     }
   }, [cart.shippingAddress.address, cart.paymentMethod, navigate]);
+
+  const placeOrderHandler = async () => {
+    try {
+      const res = await createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      }).unwrap();
+
+      dispatch(clearCartItems());
+      navigate(`/order/${res._id}`);
+    } catch (err) {
+      toast.error(err);
+    }
+  };
 
   return (
     <div>
@@ -72,7 +92,55 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
           </ListGroup>
         </Col>
-        <Col md={4}>Column</Col>
+        <Col md={4}>
+          <Card>
+            <ListGroup variant={'flush'}>
+              <ListGroup.Item>
+                <h2>Order summary</h2>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Items:</Col>
+                  <Col>${cart.itemsPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Shipping:</Col>
+                  <Col>${cart.shippingPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Tax:</Col>
+                  <Col>${cart.taxPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Total:</Col>
+                  <Col>${cart.totalPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              {error && (
+                <ListGroup.Item>
+                  <Message>{error}</Message>
+                </ListGroup.Item>
+              )}
+              <ListGroup.Item>
+                <Button
+                  type={'button'}
+                  className={'btn-block'}
+                  disabled={cart.cartItems.length === 0}
+                  onClick={placeOrderHandler}
+                >
+                  Place Order
+                </Button>
+                {isLoading && <Loader />}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+        </Col>
       </Row>
     </div>
   );
