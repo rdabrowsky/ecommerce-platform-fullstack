@@ -34,6 +34,11 @@ app.use('/api/users/', userRoutes);
 // Order routes
 app.use('/api/orders/', orderRoutes);
 
+// Connect to PayPal
+app.use('/api/config/paypal', (req, res) => {
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
