@@ -471,6 +471,8 @@ th {
     border-color: inherit;
     border-style: solid;
     border-width: 0;
+    text-wrap: nowrap;
+    vertical-align: middle;
 }
 
 label {

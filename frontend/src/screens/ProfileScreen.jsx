@@ -1,12 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Row, Col, ListGroup, Image, Form, Button, Card, Table } from 'react-bootstrap';
+import { Row, Col, Form, Button, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Loader, Message } from '../components';
 import { toast } from 'react-toastify';
 import { useProfileMutation } from '../slices/usersSlice';
 import { setCredentials } from '../slices/authSlice';
+import { useGetMyOrdersQuery } from '../slices/orderApiSlice';
+import { FaTimes } from 'react-icons/fa';
+import { convertedDate } from '../utils/convertedDate';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('');
@@ -17,6 +19,7 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation();
+  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
@@ -86,7 +89,56 @@ const ProfileScreen = () => {
           {loadingUpdateProfile && <Loader />}
         </Form>
       </Col>
-      <Col md={9}>Col</Col>
+      <Col md={9}>
+        <h2>My orders:</h2>
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant={'error'}>{error?.data?.message || error.error}</Message>
+        ) : (
+          <Table striped hover responsive className={'table-sm'}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => {
+                const { _id, createdAt, totalPrice, isPaid, isDelivered, paidAt, deliveredAt } =
+                  order;
+
+                return (
+                  <tr key={_id}>
+                    <td>{_id}</td>
+                    <td>{convertedDate(createdAt)}</td>
+                    <td>${totalPrice}</td>
+                    <td>{isPaid ? convertedDate(paidAt) : <FaTimes style={{ color: 'red' }} />}</td>
+                    <td>
+                      {isDelivered ? (
+                        convertedDate(deliveredAt)
+                      ) : (
+                        <FaTimes style={{ color: 'red' }} />
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/order/${_id}`}>
+                        <Button variant={'primary'} className={'btn-sm'}>
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        )}
+      </Col>
     </Row>
   );
 };
