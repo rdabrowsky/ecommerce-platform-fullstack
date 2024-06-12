@@ -8,3 +8,4 @@ export { default as Product } from './Product';
 export { default as Rating } from './Rating';
 export { default as PrivateRoute } from './PrivateRoute';
 export { default as CheckoutsSteps } from './CheckoutsSteps';
+export { default as AdminRoute } from './AdminRoute';
