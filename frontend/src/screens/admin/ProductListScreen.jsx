@@ -1,13 +1,31 @@
-import { useGetProductsQuery } from '../../slices/productApiSlice';
+import { useGetProductsQuery, useCreateProductMutation } from '../../slices/productApiSlice';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import { Message, Loader } from '../../components';
+import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const {
+    data: products,
+    isLoading: getProductsLoading,
+    error: getProductsError,
+    refetch,
+  } = useGetProductsQuery();
+  const [createProduct, { isLoading: createProductLoading }] = useCreateProductMutation();
   const deleteHandler = (productId) => {
     console.log(productId);
+  };
+  const createProductHandler = async () => {
+    if (window.confirm('Are you sure you want to create a new product?')) {
+      try {
+        await createProduct();
+        toast.success('Product created successfully.');
+        refetch();
+      } catch (err) {
+        toast.success(err?.data?.message || err.message);
+      }
+    }
   };
 
   return (
@@ -17,15 +35,18 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className={'text-end'}>
-          <Button className={'btn-sm m-3'}>
+          <Button className={'btn-sm m-3'} onClick={createProductHandler}>
             <FaEdit /> Create Product
           </Button>
         </Col>
       </Row>
-      {isLoading ? (
+      {createProductLoading && <Loader />}
+      {getProductsLoading ? (
         <Loader />
-      ) : error ? (
-        <Message variant={'danger'}>{error?.data?.message || error.message}</Message>
+      ) : getProductsError ? (
+        <Message variant={'danger'}>
+          {getProductsError?.data?.message || getProductsError.message}
+        </Message>
       ) : (
         <>
           <Table striped bordered hover responsive className={'table-sm'}>
