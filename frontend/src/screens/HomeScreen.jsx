@@ -1,4 +1,4 @@
-import { useGetProductsQuery } from '../slices/productSlice';
+import { useGetProductsQuery } from '../slices/productApiSlice';
 import { Col, Row } from 'react-bootstrap';
 import { Product, Loader, Message } from '../components';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import { Loader, Rating, BackButton, Message } from '../components';
-import { useGetSingleProductQuery } from '../slices/productSlice';
+import { useGetSingleProductQuery } from '../slices/productApiSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 import { addToCart } from '../slices/cartSlice';
 import { useDispatch } from 'react-redux';

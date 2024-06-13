@@ -4,7 +4,7 @@ import { Row, Col, Form, Button, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Loader, Message } from '../components';
 import { toast } from 'react-toastify';
-import { useProfileMutation } from '../slices/usersSlice';
+import { useProfileMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { useGetMyOrdersQuery } from '../slices/orderApiSlice';
 import { FaTimes } from 'react-icons/fa';
