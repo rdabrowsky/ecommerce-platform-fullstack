@@ -3,7 +3,11 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { Message, FormContainer, Loader } from '../../components';
 import { toast } from 'react-toastify';
-import { useUpdateProductMutation, useGetSingleProductQuery } from '../../slices/productApiSlice';
+import {
+  useUpdateProductMutation,
+  useGetSingleProductQuery,
+  useUploadProductImageMutation,
+} from '../../slices/productApiSlice';
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
@@ -17,7 +21,7 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
-
+  const [uploadProductImage, { isLoading: loadingUpload }] = useUploadProductImageMutation();
   const { data: product, isLoading, refetch, error } = useGetSingleProductQuery(productId);
 
   const navigate = useNavigate();
@@ -58,6 +62,9 @@ const ProductEditScreen = () => {
       toast.error(err.data?.message || err.message);
     }
   };
+  const uploadFileHandler = async (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -92,16 +99,15 @@ const ProductEditScreen = () => {
                 onChange={(e) => setPrice(+e.target.value)}
               />
             </Form.Group>
-            {/*image input placeholder*/}
-            {/*<Form.Group className={'my-2'} controlId={'image'}>*/}
-            {/*  <Form.Label>Image</Form.Label>*/}
-            {/*  <Form.Control*/}
-            {/*    type={'number'}*/}
-            {/*    name={'image'}*/}
-            {/*    value={image}*/}
-            {/*    onChange={(e) => setImage(e.target.value)}*/}
-            {/*  />*/}
-            {/*</Form.Group>*/}
+            <Form.Group className={'my-2'} controlId={'image'}>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type={'file'}
+                name={'image'}
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
+            </Form.Group>
             <Form.Group className={'my-2'} controlId={'brand'}>
               <Form.Label>Brand</Form.Label>
               <Form.Control
