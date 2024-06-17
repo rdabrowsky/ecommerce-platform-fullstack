@@ -62,8 +62,19 @@ const ProductEditScreen = () => {
       toast.error(err.data?.message || err.message);
     }
   };
+
   const uploadFileHandler = async (e) => {
-    e.preventDefault();
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+
+    try {
+      const res = await uploadProductImage(formData);
+      console.log(res);
+      toast.status(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
+    }
   };
 
   return (
@@ -102,10 +113,17 @@ const ProductEditScreen = () => {
             <Form.Group className={'my-2'} controlId={'image'}>
               <Form.Label>Image</Form.Label>
               <Form.Control
-                type={'file'}
+                type={'text'}
                 name={'image'}
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
+                className='mb-3'
+              />
+              <Form.Control
+                type={'file'}
+                name={'image'}
+                label={'Upload image'}
+                onChange={uploadFileHandler}
               />
             </Form.Group>
             <Form.Group className={'my-2'} controlId={'brand'}>
