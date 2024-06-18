@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { Message, FormContainer, Loader, BackButton } from '../../components';
 import { toast } from 'react-toastify';
@@ -30,18 +30,14 @@ const UserEditScreen = () => {
     e.preventDefault();
 
     try {
-      const updatedProduct = {
-        name,
-        email,
-        isAdmin,
-      };
-
-      const { error } = await updateUser(updatedProduct);
+      const updatedUser = { userId, name, email, isAdmin };
+      console.log(updatedUser);
+      const { error } = await updateUser(updatedUser);
 
       if (error) return toast.error(error?.data?.message || error.message);
 
-      toast.success('Product has been updated successfully.');
-      navigate(`/admin/product-list`);
+      toast.success('User has been updated successfully.');
+      navigate(`/admin/user-list`);
     } catch (err) {
       toast.error(err.data?.message || err.message);
     }
@@ -65,7 +61,7 @@ const UserEditScreen = () => {
                 type={'text'}
                 name={'name'}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={({ target }) => setName(target.value)}
               />
             </Form.Group>
             <Form.Group className={'my-2'} controlId={'email'}>
@@ -74,7 +70,7 @@ const UserEditScreen = () => {
                 type={'email'}
                 name={'email'}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={({ target }) => setEmail(target.value)}
               />
             </Form.Group>
             <Form.Group className={'my-2'} controlId={'is-admin'}>
@@ -83,7 +79,7 @@ const UserEditScreen = () => {
                 type={'switch'}
                 name={'is-admin'}
                 checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.value)}
+                onChange={({ target }) => setIsAdmin(Boolean(target.checked))}
                 className='mb-3'
               />
             </Form.Group>

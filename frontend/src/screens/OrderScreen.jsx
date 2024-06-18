@@ -79,8 +79,7 @@ const OrderScreen = () => {
   }
   const markOrderAsDelivered = async () => {
     try {
-      const order = await deliverOrder(orderId);
-      console.log(order);
+      await deliverOrder(orderId);
 
       refetch();
       toast.success('Order has been marked as delivered');
