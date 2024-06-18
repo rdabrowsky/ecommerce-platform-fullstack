@@ -1,25 +1,49 @@
-import express from 'express';
 import path from 'path';
+import express from 'express';
 import multer from 'multer';
 
-import { admin, protect } from '../middleware/authMiddleware.js';
-
 const router = express.Router();
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, `uploads/`);
+  destination(req, file, cb) {
+    cb(null, 'uploads/');
   },
-  filename: (req, file, cb) => {
-    cb(null, `${file.filename}-${Date.now()}${path.extname(file.originalname)}`);
+  filename(req, file, cb) {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
-const upload = multer({ storage });
+function fileFilter(req, file, cb) {
+  const filetypes = /jpe?g|png|webp/;
+  const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
 
-router.post('/', upload.single('image'), (req, res) => {
-  res.send({
-    message: 'Image uploaded',
-    image: `/${req.file.path}`,
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = mimetypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Images only!'), false);
+  }
+}
+
+const upload = multer({ storage, fileFilter });
+const uploadSingleImage = upload.single('image');
+
+router.post('/', (req, res) => {
+  uploadSingleImage(req, res, function (err) {
+    if (err) {
+      return res.status(400).send({ message: err.message });
+    }
+
+    // Normalize the file path to use forward slashes
+    const normalizedPath = req.file.path.replace(/\\/g, '/');
+
+    res.status(200).send({
+      message: 'Image uploaded successfully',
+      image: `/${normalizedPath}`,
+    });
   });
 });
+
 export default router;
