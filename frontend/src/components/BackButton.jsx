@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
-const BackButton = ({ title, props }) => {
+const BackButton = ({ title, url, props }) => {
   return (
-    <Link to={document.referrer || '/'} className={'btn btn-light my-3'} {...props}>
-      {title}
+    <Link className={'btn btn-light my-3'} {...props} to={url || '/'}>
+      {title || 'Go back'}
     </Link>
   );
 };
