@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
-import { Message, FormContainer, Loader } from '../../components';
+import { Message, FormContainer, Loader, BackButton } from '../../components';
 import { toast } from 'react-toastify';
 import {
   useUpdateProductMutation,
@@ -79,9 +79,7 @@ const ProductEditScreen = () => {
 
   return (
     <>
-      <Link to={'/admin/product-list'} className={'btn btn-light my-3'}>
-        Go back
-      </Link>
+      <BackButton url={'/admin/product-list'} />
       <FormContainer>
         <h1>Edit Product</h1>
         {loadingUpdate && <Loader />}

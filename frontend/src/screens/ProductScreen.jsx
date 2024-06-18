@@ -20,7 +20,7 @@ const ProductScreen = () => {
 
   return (
     <>
-      <BackButton title={'Go Back'} />
+      <BackButton />
       {isLoading ? (
         <Loader />
       ) : error ? (
