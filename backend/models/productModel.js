@@ -3,23 +3,24 @@ import mongoose from 'mongoose';
 const reviewSchema = new mongoose.Schema(
   {
     user: {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-      },
-      name: {
-        type: String,
-        required: true,
-      },
-      rating: {
-        type: Number,
-        required: true,
-      },
-      comment: {
-        type: String,
-        required: true,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 5,
+      step: 0.5,
+    },
+    comment: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true },
@@ -38,7 +39,7 @@ const productSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      // required: true,
+      required: true,
     },
     brand: {
       type: String,
